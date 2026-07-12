@@ -49,7 +49,7 @@ endfunction
 function! contrastic#set_bg(timer_id)
   if !exists("g:contrastic_enable_dyn_bg")
     if g:contrastic_debug
-      echo "!exists(\"g:contrastic_enable_dyn_bg\")"
+      echomsg "!exists(\"g:contrastic_enable_dyn_bg\")"
     endif
 
     return
@@ -57,7 +57,7 @@ function! contrastic#set_bg(timer_id)
 
   if !g:contrastic_enable_dyn_bg
     if g:contrastic_debug
-      echo "!g:contrastic_enable_dyn_bg"
+      echomsg "!g:contrastic_enable_dyn_bg"
     endif
 
     return
@@ -65,7 +65,7 @@ function! contrastic#set_bg(timer_id)
 
   if !exists("g:contrastic_light_bg_time")
     if g:contrastic_debug
-      echo "!exists(\"g:contrastic_light_bg_time\")"
+      echomsg "!exists(\"g:contrastic_light_bg_time\")"
     endif
 
     return
@@ -73,7 +73,7 @@ function! contrastic#set_bg(timer_id)
 
   if (len(g:contrastic_light_bg_time) != 2)
     if g:contrastic_debug
-      echo "(len(g:contrastic_light_bg_time) != 2)"
+      echomsg "(len(g:contrastic_light_bg_time) != 2)"
     endif
 
     return
@@ -89,6 +89,30 @@ function! contrastic#set_bg(timer_id)
     let g:lsp_cxx_hl_light_bg = 1
     mode
   elseif ((l:hour < l:light) || (l:hour >= l:dark)) && !l:is_dark
+    set background=dark
+    let g:lsp_cxx_hl_light_bg = 0
+    mode
+  endif
+endfunction
+
+function! contrastic#set_bg2(timer_id)
+  if !exists('$THEME_MODE')
+    if g:contrastic_debug
+      echomsg "!exists('$THEME_MODE')"
+    endif
+
+    return
+  endif
+
+  let l:theme_mode = $THEME_MODE
+  let l:is_curr_dark = &background == 'dark'
+  let l:is_requested_dark = l:theme_mode == 'dark'
+
+  if !l:is_requested_dark && l:is_curr_dark
+    set background=light
+    let g:lsp_cxx_hl_light_bg = 1
+    mode
+  elseif l:is_requested_dark && !l:is_curr_dark
     set background=dark
     let g:lsp_cxx_hl_light_bg = 0
     mode

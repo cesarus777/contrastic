@@ -15,10 +15,10 @@ function s:StartDynamicBackground(timeout)
   if g:contrastic_enable_dyn_bg
     let s:timer_id =
           \ timer_start(1000 * (a:timeout + 0),
-                      \ function('contrastic#set_bg'),
+                      \ function('contrastic#set_bg2'),
                       \ {'repeat': -1})
 
-    call contrastic#set_bg(s:timer_id)
+    call contrastic#set_bg2(s:timer_id)
   endif
 endfunction
 
@@ -36,7 +36,7 @@ function s:SetDynamicBackgroundTimeout(timeout)
 endfunction
 
 if !exists(":ContrasticSetBg")
-  command -nargs=0 ContrasticSetBg :call contrastic#set_bg(0)
+  command -nargs=0 ContrasticSetBg :call contrastic#set_bg2(0)
 endif
 
 if !exists(":ContrasticSetDynBgTimeout")
